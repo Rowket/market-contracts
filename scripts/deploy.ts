@@ -25,7 +25,6 @@ async function start() {
 
   console.log('Deploying Market...');
   const deployTx = await new MarketFactory(wallet).deploy();
-  console.log(deployTx)
   console.log('Deploy TX: ', deployTx.deployTransaction.hash);
   await deployTx.deployed();
   console.log('Market deployed at ', deployTx.address);
