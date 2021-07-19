@@ -9,7 +9,8 @@
 
 pragma solidity 0.6.8;
 
-import "@openzeppelin/contracts/GSN/Context.sol";
+// import "@openzeppelin/contracts/GSN/Context.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/GSN/Context.sol";
 import "./ERC721.sol";
 
 /**

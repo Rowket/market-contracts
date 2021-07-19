@@ -4,17 +4,24 @@ pragma experimental ABIEncoderV2;
 
 import {ERC721Burnable} from "./ERC721Burnable.sol";
 import {ERC721} from "./ERC721.sol";
-import {EnumerableSet} from "@openzeppelin/contracts/utils/EnumerableSet.sol";
-import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
-import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
-import {Math} from "@openzeppelin/contracts/math/Math.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {
-    ReentrancyGuard
-} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+// import {EnumerableSet} from "@openzeppelin/contracts/utils/EnumerableSet.sol";
+// import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+// import {Math} from "@openzeppelin/contracts/math/Math.sol";
+// import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
+// import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+// import {
+//     ReentrancyGuard
+// } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+import {EnumerableSet} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/utils/EnumerableSet.sol";
+import {Counters} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/utils/Counters.sol";
+import {SafeMath} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/math/SafeMath.sol";
+import {Math} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/math/Math.sol";
+import {IERC20} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC20/IERC20.sol";
+import {ReentrancyGuard} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/utils/ReentrancyGuard.sol";
 import {Decimal} from "./Decimal.sol";
 import {IMarket} from "./interfaces/IMarket.sol";
-import "./interfaces/IMedia.sol";
+import {IMedia} from "./interfaces/IMedia.sol";
 
 /**
  * @title A media value system, with perpetual equity to creators

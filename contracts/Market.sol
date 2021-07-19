@@ -3,10 +3,15 @@
 pragma solidity 0.6.8;
 pragma experimental ABIEncoderV2;
 
-import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
-import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+// import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+// import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+// import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+// import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import {SafeMath} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/math/SafeMath.sol";
+import {IERC721} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC721/IERC721.sol";
+import {IERC20} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC20/SafeERC20.sol";
+
 import {Decimal} from "./Decimal.sol";
 import {Media} from "./Media.sol";
 import {IMarket} from "./interfaces/IMarket.sol";
@@ -47,7 +52,8 @@ contract Market is IMarket {
      * @notice require that the msg.sender is the configured media contract
      */
     modifier onlyMediaCaller() {
-        require(mediaContract == msg.sender, "Market: Only media contract");
+        // require(mediaContract == msg.sender, "Market: Only media contract");
+        require(msg.sender == msg.sender, "commented out by TV");
         _;
     }
 
@@ -284,7 +290,8 @@ contract Market is IMarket {
 
         emit BidRemoved(tokenId, bid);
         delete _tokenBidders[tokenId][bidder];
-        token.safeTransfer(bidder, bidAmount);
+        // token.safeTransfer(bidder, bidAmount);
+        token.transfer(bidder, bidAmount);
     }
 
     /**
@@ -330,20 +337,26 @@ contract Market is IMarket {
         IERC20 token = IERC20(bid.currency);
 
         // Transfer bid share to owner of media
-        token.safeTransfer(
-            IERC721(mediaContract).ownerOf(tokenId),
-            splitShare(bidShares.owner, bid.amount)
-        );
+        if (splitShare(bidShares.owner, bid.amount) > 0) {
+            token.transfer(
+                IERC721(mediaContract).ownerOf(tokenId),
+                splitShare(bidShares.owner, bid.amount)
+            );   
+        }
         // Transfer bid share to creator of media
-        token.safeTransfer(
-            Media(mediaContract).tokenCreators(tokenId),
-            splitShare(bidShares.creator, bid.amount)
-        );
+        if (splitShare(bidShares.creator, bid.amount) > 0) {
+            token.transfer(
+                Media(mediaContract).tokenCreators(tokenId),
+                splitShare(bidShares.creator, bid.amount)
+            );   
+        }
         // Transfer bid share to previous owner of media (if applicable)
-        token.safeTransfer(
-            Media(mediaContract).previousTokenOwners(tokenId),
-            splitShare(bidShares.prevOwner, bid.amount)
-        );
+        if (splitShare(bidShares.prevOwner, bid.amount) > 0) {
+            token.transfer(
+                Media(mediaContract).previousTokenOwners(tokenId),
+                splitShare(bidShares.prevOwner, bid.amount)
+            );   
+        }
 
         // Transfer media to bid recipient
         Media(mediaContract).auctionTransfer(tokenId, bid.recipient);

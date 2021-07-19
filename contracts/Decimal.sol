@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0
 /*
     Copyright 2019 dYdX Trading Inc.
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +22,9 @@ pragma experimental ABIEncoderV2;
  * It has not been modified other than to use a newer solidity in the pragma to match the rest of the contract suite of this project
  */
 
-import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+// import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+import {SafeMath} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/math/SafeMath.sol";
+
 import {Math} from "./Math.sol";
 
 /**

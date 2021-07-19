@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.6.8;
 pragma experimental ABIEncoderV2;
 
-import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
-
+// import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
+import {SafeMath} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/math/SafeMath.sol";
 /**
  * @title Math
  *
