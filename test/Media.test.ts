@@ -101,7 +101,7 @@ describe('Media', () => {
   const defaultBid = (
     currency: string,
     bidder: string,
-    recipient?: string
+    recipient?: string,
   ) => ({
     amount: 100,
     currency,
@@ -135,7 +135,7 @@ describe('Media', () => {
     tokenURI: string,
     contentHash: Bytes,
     metadataHash: Bytes,
-    shares: BidShares
+    shares: BidShares,
   ) {
     const data: MediaData = {
       tokenURI,
@@ -154,7 +154,7 @@ describe('Media', () => {
     contentHash: Bytes,
     metadataHash: Bytes,
     shares: BidShares,
-    sig: EIP712Sig
+    sig: EIP712Sig,
   ) {
     const data: MediaData = {
       tokenURI,
@@ -211,13 +211,13 @@ describe('Media', () => {
       tokenURI,
       contentHashBytes,
       metadataHashBytes,
-      defaultBidShares
+      defaultBidShares,
     );
 
     await setBid(
       asPrevOwner,
       defaultBid(currencyAddr, prevOwnerWallet.address),
-      tokenId
+      tokenId,
     );
     await acceptBid(asCreator, tokenId, {
       ...defaultBid(currencyAddr, prevOwnerWallet.address),
@@ -225,22 +225,22 @@ describe('Media', () => {
     await setBid(
       asOwner,
       defaultBid(currencyAddr, ownerWallet.address),
-      tokenId
+      tokenId,
     );
     await acceptBid(
       asPrevOwner,
       tokenId,
-      defaultBid(currencyAddr, ownerWallet.address)
+      defaultBid(currencyAddr, ownerWallet.address),
     );
     await setBid(
       asBidder,
       defaultBid(currencyAddr, bidderWallet.address),
-      tokenId
+      tokenId,
     );
     await setBid(
       asOther,
       defaultBid(currencyAddr, otherWallet.address),
-      tokenId
+      tokenId,
     );
   }
 
@@ -287,8 +287,8 @@ describe('Media', () => {
             prevOwner: Decimal.new(10),
             creator: Decimal.new(90),
             owner: Decimal.new(0),
-          }
-        )
+          },
+        ),
       ).fulfilled;
 
       const t = await token.tokenByIndex(0);
@@ -325,8 +325,8 @@ describe('Media', () => {
             prevOwner: Decimal.new(10),
             creator: Decimal.new(90),
             owner: Decimal.new(0),
-          }
-        )
+          },
+        ),
       ).rejectedWith('Media: content hash must be non-zero');
     });
 
@@ -344,8 +344,8 @@ describe('Media', () => {
             prevOwner: Decimal.new(10),
             creator: Decimal.new(90),
             owner: Decimal.new(0),
-          }
-        )
+          },
+        ),
       ).fulfilled;
 
       await expect(
@@ -359,10 +359,10 @@ describe('Media', () => {
             prevOwner: Decimal.new(10),
             creator: Decimal.new(90),
             owner: Decimal.new(0),
-          }
-        )
+          },
+        ),
       ).rejectedWith(
-        'Media: a token has already been created with this content hash'
+        'Media: a token has already been created with this content hash',
       );
     });
 
@@ -380,8 +380,8 @@ describe('Media', () => {
             prevOwner: Decimal.new(10),
             creator: Decimal.new(90),
             owner: Decimal.new(0),
-          }
-        )
+          },
+        ),
       ).rejectedWith('Media: metadata hash must be non-zero');
     });
 
@@ -393,7 +393,7 @@ describe('Media', () => {
           prevOwner: Decimal.new(10),
           creator: Decimal.new(90),
           owner: Decimal.new(0),
-        })
+        }),
       ).rejectedWith('Media: specified uri must be non-empty');
     });
 
@@ -405,7 +405,7 @@ describe('Media', () => {
           prevOwner: Decimal.new(10),
           creator: Decimal.new(90),
           owner: Decimal.new(0),
-        })
+        }),
       ).rejectedWith('Media: specified uri must be non-empty');
     });
 
@@ -423,8 +423,8 @@ describe('Media', () => {
             prevOwner: Decimal.new(15),
             owner: Decimal.new(15),
             creator: Decimal.new(15),
-          }
-        )
+          },
+        ),
       ).rejectedWith('Market: Invalid bid shares, must sum to 100');
     });
 
@@ -436,7 +436,7 @@ describe('Media', () => {
           prevOwner: Decimal.new(99),
           owner: Decimal.new(1),
           creator: Decimal.new(1),
-        })
+        }),
       ).rejectedWith('Market: Invalid bid shares, must sum to 100');
     });
   });
@@ -456,7 +456,7 @@ describe('Media', () => {
         contentHash,
         metadataHash,
         Decimal.new(5).value.toString(),
-        1
+        1,
       );
 
       const beforeNonce = await token.mintWithSigNonces(creatorWallet.address);
@@ -473,8 +473,8 @@ describe('Media', () => {
             owner: Decimal.new(95),
             creator: Decimal.new(5),
           },
-          sig
-        )
+          sig,
+        ),
       ).fulfilled;
 
       const recovered = await token.tokenCreators(0);
@@ -484,7 +484,7 @@ describe('Media', () => {
       const recoveredMetadataHash = await token.tokenMetadataHashes(0);
       const recoveredCreatorBidShare = formatUnits(
         (await market.bidSharesForToken(0)).creator.value,
-        'ether'
+        'ether',
       );
       const afterNonce = await token.mintWithSigNonces(creatorWallet.address);
 
@@ -506,7 +506,7 @@ describe('Media', () => {
         tokenURI,
         metadataURI,
         Decimal.new(5).value.toString(),
-        1
+        1,
       );
 
       await expect(
@@ -522,8 +522,8 @@ describe('Media', () => {
             owner: Decimal.new(95),
             creator: Decimal.new(5),
           },
-          sig
-        )
+          sig,
+        ),
       ).rejectedWith('Media: Signature invalid');
     });
 
@@ -541,7 +541,7 @@ describe('Media', () => {
         contentHash,
         metadataHash,
         Decimal.new(5).value.toString(),
-        1
+        1,
       );
 
       await expect(
@@ -557,8 +557,8 @@ describe('Media', () => {
             owner: Decimal.new(95),
             creator: Decimal.new(5),
           },
-          sig
-        )
+          sig,
+        ),
       ).rejectedWith('Media: Signature invalid');
     });
     it('should not mint a token for a different metadataHash', async () => {
@@ -574,7 +574,7 @@ describe('Media', () => {
         contentHash,
         metadataHash,
         Decimal.new(5).value.toString(),
-        1
+        1,
       );
 
       await expect(
@@ -590,8 +590,8 @@ describe('Media', () => {
             owner: Decimal.new(95),
             creator: Decimal.new(5),
           },
-          sig
-        )
+          sig,
+        ),
       ).rejectedWith('Media: Signature invalid');
     });
     it('should not mint a token for a different creator bid share', async () => {
@@ -603,7 +603,7 @@ describe('Media', () => {
         tokenURI,
         metadataURI,
         Decimal.new(5).value.toString(),
-        1
+        1,
       );
 
       await expect(
@@ -619,8 +619,8 @@ describe('Media', () => {
             owner: Decimal.new(100),
             creator: Decimal.new(0),
           },
-          sig
-        )
+          sig,
+        ),
       ).rejectedWith('Media: Signature invalid');
     });
     it('should not mint a token with an invalid deadline', async () => {
@@ -632,7 +632,7 @@ describe('Media', () => {
         tokenURI,
         metadataURI,
         Decimal.new(5).value.toString(),
-        1
+        1,
       );
 
       await expect(
@@ -648,8 +648,8 @@ describe('Media', () => {
             owner: Decimal.new(95),
             creator: Decimal.new(5),
           },
-          { ...sig, deadline: '1' }
-        )
+          { ...sig, deadline: '1' },
+        ),
       ).rejectedWith('Media: mintWithSig expired');
     });
   });
@@ -670,14 +670,14 @@ describe('Media', () => {
     it('should reject if the ask is 0', async () => {
       const token = await tokenAs(ownerWallet);
       await expect(setAsk(token, 0, { ...defaultAsk, amount: 0 })).rejectedWith(
-        'Market: Ask invalid for share splitting'
+        'Market: Ask invalid for share splitting',
       );
     });
 
     it('should reject if the ask amount is invalid and cannot be split', async () => {
       const token = await tokenAs(ownerWallet);
       await expect(
-        setAsk(token, 0, { ...defaultAsk, amount: 101 })
+        setAsk(token, 0, { ...defaultAsk, amount: 101 }),
       ).rejectedWith('Market: Ask invalid for share splitting');
     });
   });
@@ -687,7 +687,7 @@ describe('Media', () => {
       const token = await tokenAs(ownerWallet);
       const market = await MarketFactory.connect(
         auctionAddress,
-        deployerWallet
+        deployerWallet,
       );
       await setAsk(token, 0, defaultAsk);
 
@@ -701,7 +701,7 @@ describe('Media', () => {
       const token = await tokenAs(ownerWallet);
       const auction = await MarketFactory.connect(
         auctionAddress,
-        deployerWallet
+        deployerWallet,
       );
       await setAsk(token, 0, defaultAsk);
       const block = await provider.getBlockNumber();
@@ -709,7 +709,7 @@ describe('Media', () => {
 
       const events = await auction.queryFilter(
         auction.filters.AskRemoved(0, null),
-        block
+        block,
       );
       expect(events.length).eq(1);
       const logDescription = auction.interface.parseLog(events[0]);
@@ -724,7 +724,7 @@ describe('Media', () => {
       await setAsk(token, 0, defaultAsk);
 
       expect(removeAsk(asOther, 0)).rejectedWith(
-        'Media: Only approved or owner'
+        'Media: Only approved or owner',
       );
     });
   });
@@ -739,7 +739,7 @@ describe('Media', () => {
         '1111',
         otherContentHashBytes,
         metadataHashBytes,
-        defaultBidShares
+        defaultBidShares,
       );
       currencyAddr = await deployCurrency();
     });
@@ -747,7 +747,7 @@ describe('Media', () => {
     it('should revert if the token bidder does not have a high enough allowance for their bidding currency', async () => {
       const token = await tokenAs(bidderWallet);
       await expect(
-        token.setBid(0, defaultBid(currencyAddr, bidderWallet.address))
+        token.setBid(0, defaultBid(currencyAddr, bidderWallet.address)),
       ).rejectedWith('SafeERC20: ERC20 operation did not succeed');
     });
 
@@ -755,7 +755,7 @@ describe('Media', () => {
       const token = await tokenAs(bidderWallet);
       await approveCurrency(currencyAddr, auctionAddress, bidderWallet);
       await expect(
-        token.setBid(0, defaultBid(currencyAddr, bidderWallet.address))
+        token.setBid(0, defaultBid(currencyAddr, bidderWallet.address)),
       ).rejectedWith('SafeERC20: ERC20 operation did not succeed');
     });
 
@@ -764,7 +764,7 @@ describe('Media', () => {
       await approveCurrency(currencyAddr, auctionAddress, bidderWallet);
       await mintCurrency(currencyAddr, bidderWallet.address, 100000);
       await expect(
-        token.setBid(0, defaultBid(currencyAddr, bidderWallet.address))
+        token.setBid(0, defaultBid(currencyAddr, bidderWallet.address)),
       ).fulfilled;
       const balance = await getBalance(currencyAddr, bidderWallet.address);
       expect(toNumWei(balance)).eq(100000 - 100);
@@ -777,7 +777,7 @@ describe('Media', () => {
       await setAsk(asOwner, 1, { ...defaultAsk, currency: currencyAddr });
 
       await expect(
-        token.setBid(1, defaultBid(currencyAddr, bidderWallet.address))
+        token.setBid(1, defaultBid(currencyAddr, bidderWallet.address)),
       ).fulfilled;
 
       await expect(token.ownerOf(1)).eventually.eq(bidderWallet.address);
@@ -788,7 +788,7 @@ describe('Media', () => {
       await setupAuction(currencyAddr, 1);
 
       const beforeBalance = toNumWei(
-        await getBalance(currencyAddr, bidderWallet.address)
+        await getBalance(currencyAddr, bidderWallet.address),
       );
       await setBid(
         token,
@@ -799,10 +799,10 @@ describe('Media', () => {
           recipient: otherWallet.address,
           sellOnShare: Decimal.new(10),
         },
-        1
+        1,
       );
       const afterBalance = toNumWei(
-        await getBalance(currencyAddr, bidderWallet.address)
+        await getBalance(currencyAddr, bidderWallet.address),
       );
 
       expect(afterBalance).eq(beforeBalance - 100);
@@ -821,7 +821,7 @@ describe('Media', () => {
       const token = await tokenAs(nonBidderWallet);
 
       await expect(removeBid(token, 0)).rejectedWith(
-        'Market: cannot remove bid amount of 0'
+        'Market: cannot remove bid amount of 0',
       );
     });
 
@@ -829,18 +829,18 @@ describe('Media', () => {
       const token = await tokenAs(bidderWallet);
 
       await expect(removeBid(token, 100)).rejectedWith(
-        'Media: token with that id does not exist'
+        'Media: token with that id does not exist',
       );
     });
 
     it('should remove a bid and refund the bidder', async () => {
       const token = await tokenAs(bidderWallet);
       const beforeBalance = toNumWei(
-        await getBalance(currencyAddr, bidderWallet.address)
+        await getBalance(currencyAddr, bidderWallet.address),
       );
       await expect(removeBid(token, 0)).fulfilled;
       const afterBalance = toNumWei(
-        await getBalance(currencyAddr, bidderWallet.address)
+        await getBalance(currencyAddr, bidderWallet.address),
       );
 
       expect(afterBalance).eq(beforeBalance + 100);
@@ -851,7 +851,7 @@ describe('Media', () => {
       await removeBid(token, 0);
 
       await expect(removeBid(token, 0)).rejectedWith(
-        'Market: cannot remove bid amount of 0'
+        'Market: cannot remove bid amount of 0',
       );
     });
 
@@ -863,11 +863,11 @@ describe('Media', () => {
       await asOwner.transferFrom(ownerWallet.address, creatorWallet.address, 0);
       await asCreator.burn(0);
       const beforeBalance = toNumWei(
-        await getBalance(currencyAddr, bidderWallet.address)
+        await getBalance(currencyAddr, bidderWallet.address),
       );
       await expect(asBidder.removeBid(0)).fulfilled;
       const afterBalance = toNumWei(
-        await getBalance(currencyAddr, bidderWallet.address)
+        await getBalance(currencyAddr, bidderWallet.address),
       );
       expect(afterBalance).eq(beforeBalance + 100);
     });
@@ -892,24 +892,24 @@ describe('Media', () => {
       await setBid(asBidder, bid, 0);
 
       const beforeOwnerBalance = toNumWei(
-        await getBalance(currencyAddr, ownerWallet.address)
+        await getBalance(currencyAddr, ownerWallet.address),
       );
       const beforePrevOwnerBalance = toNumWei(
-        await getBalance(currencyAddr, prevOwnerWallet.address)
+        await getBalance(currencyAddr, prevOwnerWallet.address),
       );
       const beforeCreatorBalance = toNumWei(
-        await getBalance(currencyAddr, creatorWallet.address)
+        await getBalance(currencyAddr, creatorWallet.address),
       );
       await expect(token.acceptBid(0, bid)).fulfilled;
       const newOwner = await token.ownerOf(0);
       const afterOwnerBalance = toNumWei(
-        await getBalance(currencyAddr, ownerWallet.address)
+        await getBalance(currencyAddr, ownerWallet.address),
       );
       const afterPrevOwnerBalance = toNumWei(
-        await getBalance(currencyAddr, prevOwnerWallet.address)
+        await getBalance(currencyAddr, prevOwnerWallet.address),
       );
       const afterCreatorBalance = toNumWei(
-        await getBalance(currencyAddr, creatorWallet.address)
+        await getBalance(currencyAddr, creatorWallet.address),
       );
       const bidShares = await auction.bidSharesForToken(0);
 
@@ -932,7 +932,7 @@ describe('Media', () => {
       await token.acceptBid(0, bid);
       const events = await auction.queryFilter(
         auction.filters.BidFinalized(null, null),
-        block
+        block,
       );
       expect(events.length).eq(1);
       const logDescription = auction.interface.parseLog(events[0]);
@@ -940,7 +940,7 @@ describe('Media', () => {
       expect(toNumWei(logDescription.args.bid.amount)).to.eq(bid.amount);
       expect(logDescription.args.bid.currency).to.eq(bid.currency);
       expect(toNumWei(logDescription.args.bid.sellOnShare.value)).to.eq(
-        toNumWei(bid.sellOnShare.value)
+        toNumWei(bid.sellOnShare.value),
       );
       expect(logDescription.args.bid.bidder).to.eq(bid.bidder);
     });
@@ -955,19 +955,19 @@ describe('Media', () => {
       await token.acceptBid(0, bid);
       const events = await auction.queryFilter(
         auction.filters.BidShareUpdated(null, null),
-        block
+        block,
       );
       expect(events.length).eq(1);
       const logDescription = auction.interface.parseLog(events[0]);
       expect(toNumWei(logDescription.args.tokenId)).to.eq(0);
       expect(toNumWei(logDescription.args.bidShares.prevOwner.value)).to.eq(
-        10000000000000000000
+        10000000000000000000,
       );
       expect(toNumWei(logDescription.args.bidShares.owner.value)).to.eq(
-        80000000000000000000
+        80000000000000000000,
       );
       expect(toNumWei(logDescription.args.bidShares.creator.value)).to.eq(
-        10000000000000000000
+        10000000000000000000,
       );
     });
 
@@ -975,14 +975,16 @@ describe('Media', () => {
       const token = await tokenAs(otherWallet);
 
       await expect(
-        token.acceptBid(0, { ...defaultBid(currencyAddr, otherWallet.address) })
+        token.acceptBid(0, {
+          ...defaultBid(currencyAddr, otherWallet.address),
+        }),
       ).rejectedWith('Media: Only approved or owner');
     });
 
     it('should revert if a non-existent bid is accepted', async () => {
       const token = await tokenAs(ownerWallet);
       await expect(
-        token.acceptBid(0, { ...defaultBid(currencyAddr, AddressZero) })
+        token.acceptBid(0, { ...defaultBid(currencyAddr, AddressZero) }),
       ).rejectedWith('Market: cannot accept bid of 0');
     });
 
@@ -996,7 +998,7 @@ describe('Media', () => {
       await setBid(asBidder, bid, 0);
 
       await expect(token.acceptBid(0, bid)).rejectedWith(
-        'Market: Bid invalid for share splitting'
+        'Market: Bid invalid for share splitting',
       );
     });
 
@@ -1017,7 +1019,7 @@ describe('Media', () => {
       await setAsk(token, 0, defaultAsk);
 
       await expect(
-        token.transferFrom(ownerWallet.address, otherWallet.address, 0)
+        token.transferFrom(ownerWallet.address, otherWallet.address, 0),
       ).fulfilled;
       const ask = await auction.currentAskForToken(0);
       await expect(toNumWei(ask.amount)).eq(0);
@@ -1039,7 +1041,7 @@ describe('Media', () => {
           prevOwner: Decimal.new(10),
           creator: Decimal.new(90),
           owner: Decimal.new(0),
-        }
+        },
       );
     });
 
@@ -1048,11 +1050,11 @@ describe('Media', () => {
       await creatorToken.transferFrom(
         creatorWallet.address,
         ownerWallet.address,
-        0
+        0,
       );
       const token = await tokenAs(ownerWallet);
       await expect(token.burn(0)).rejectedWith(
-        'Media: owner is not creator of media'
+        'Media: owner is not creator of media',
       );
     });
 
@@ -1061,14 +1063,14 @@ describe('Media', () => {
       await creatorToken.transferFrom(
         creatorWallet.address,
         ownerWallet.address,
-        0
+        0,
       );
       const token = await tokenAs(ownerWallet);
       await token.approve(otherWallet.address, 0);
 
       const otherToken = await tokenAs(otherWallet);
       await expect(otherToken.burn(0)).rejectedWith(
-        'Media: owner is not creator of media'
+        'Media: owner is not creator of media',
       );
     });
 
@@ -1091,14 +1093,14 @@ describe('Media', () => {
       await expect(token.burn(0)).fulfilled;
 
       await expect(token.ownerOf(0)).rejectedWith(
-        'ERC721: owner query for nonexistent token'
+        'ERC721: owner query for nonexistent token',
       );
 
       const totalSupply = await token.totalSupply();
       expect(toNumWei(totalSupply)).eq(0);
 
       await expect(token.getApproved(0)).rejectedWith(
-        'ERC721: approved query for nonexistent token'
+        'ERC721: approved query for nonexistent token',
       );
 
       const tokenURI = await token.tokenURI(0);
@@ -1120,14 +1122,14 @@ describe('Media', () => {
       await expect(otherToken.burn(0)).fulfilled;
 
       await expect(token.ownerOf(0)).rejectedWith(
-        'ERC721: owner query for nonexistent token'
+        'ERC721: owner query for nonexistent token',
       );
 
       const totalSupply = await token.totalSupply();
       expect(toNumWei(totalSupply)).eq(0);
 
       await expect(token.getApproved(0)).rejectedWith(
-        'ERC721: approved query for nonexistent token'
+        'ERC721: approved query for nonexistent token',
       );
 
       const tokenURI = await token.tokenURI(0);
@@ -1154,7 +1156,7 @@ describe('Media', () => {
       const token = await tokenAs(creatorWallet);
 
       await expect(token.updateTokenURI(1, 'blah blah')).rejectedWith(
-        'ERC721: operator query for nonexistent token'
+        'ERC721: operator query for nonexistent token',
       );
     });
 
@@ -1162,14 +1164,14 @@ describe('Media', () => {
       const token = await tokenAs(otherWallet);
 
       await expect(token.updateTokenURI(0, 'blah blah')).rejectedWith(
-        'Media: Only approved or owner'
+        'Media: Only approved or owner',
       );
     });
 
     it('should revert if the uri is empty string', async () => {
       const token = await tokenAs(ownerWallet);
       await expect(token.updateTokenURI(0, '')).rejectedWith(
-        'Media: specified uri must be non-empty'
+        'Media: specified uri must be non-empty',
       );
     });
 
@@ -1186,13 +1188,13 @@ describe('Media', () => {
           prevOwner: Decimal.new(10),
           creator: Decimal.new(90),
           owner: Decimal.new(0),
-        }
+        },
       );
 
       await expect(token.burn(1)).fulfilled;
 
       await expect(token.updateTokenURI(1, 'blah')).rejectedWith(
-        'ERC721: operator query for nonexistent token'
+        'ERC721: operator query for nonexistent token',
       );
     });
 
@@ -1229,7 +1231,7 @@ describe('Media', () => {
       const token = await tokenAs(creatorWallet);
 
       await expect(token.updateTokenMetadataURI(1, 'blah blah')).rejectedWith(
-        'ERC721: operator query for nonexistent token'
+        'ERC721: operator query for nonexistent token',
       );
     });
 
@@ -1237,14 +1239,14 @@ describe('Media', () => {
       const token = await tokenAs(otherWallet);
 
       await expect(token.updateTokenMetadataURI(0, 'blah blah')).rejectedWith(
-        'Media: Only approved or owner'
+        'Media: Only approved or owner',
       );
     });
 
     it('should revert if the uri is empty string', async () => {
       const token = await tokenAs(ownerWallet);
       await expect(token.updateTokenMetadataURI(0, '')).rejectedWith(
-        'Media: specified uri must be non-empty'
+        'Media: specified uri must be non-empty',
       );
     });
 
@@ -1261,13 +1263,13 @@ describe('Media', () => {
           prevOwner: Decimal.new(10),
           creator: Decimal.new(90),
           owner: Decimal.new(0),
-        }
+        },
       );
 
       await expect(token.burn(1)).fulfilled;
 
       await expect(token.updateTokenMetadataURI(1, 'blah')).rejectedWith(
-        'ERC721: operator query for nonexistent token'
+        'ERC721: operator query for nonexistent token',
       );
     });
 
@@ -1308,7 +1310,7 @@ describe('Media', () => {
         token.address,
         0,
         // NOTE: We set the chain ID to 1 because of an error with ganache-core: https://github.com/trufflesuite/ganache-core/issues/515
-        1
+        1,
       );
       await expect(token.permit(otherWallet.address, 0, sig)).fulfilled;
       await expect(token.getApproved(0)).eventually.eq(otherWallet.address);
@@ -1321,10 +1323,10 @@ describe('Media', () => {
         bidderWallet.address,
         token.address,
         0,
-        1
+        1,
       );
       await expect(token.permit(otherWallet.address, 0, sig)).rejectedWith(
-        'Media: Signature invalid'
+        'Media: Signature invalid',
       );
       await expect(token.getApproved(0)).eventually.eq(AddressZero);
     });
@@ -1362,21 +1364,21 @@ describe('Media', () => {
     it('should revert if the caller is the owner', async () => {
       const token = await tokenAs(ownerWallet);
       await expect(token.revokeApproval(0)).rejectedWith(
-        'Media: caller not approved address'
+        'Media: caller not approved address',
       );
     });
 
     it('should revert if the caller is the creator', async () => {
       const token = await tokenAs(creatorWallet);
       await expect(token.revokeApproval(0)).rejectedWith(
-        'Media: caller not approved address'
+        'Media: caller not approved address',
       );
     });
 
     it('should revert if the caller is neither owner, creator, or approver', async () => {
       const token = await tokenAs(otherWallet);
       await expect(token.revokeApproval(0)).rejectedWith(
-        'Media: caller not approved address'
+        'Media: caller not approved address',
       );
     });
 

@@ -3,18 +3,18 @@
 pragma solidity 0.6.8;
 pragma experimental ABIEncoderV2;
 
-// import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
-// import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-// import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-// import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import {SafeMath} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/math/SafeMath.sol";
-import {IERC721} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC721/IERC721.sol";
-import {IERC20} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC20/SafeERC20.sol";
+import {SafeMath} from '@openzeppelin/contracts/math/SafeMath.sol';
+import {IERC721} from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
+import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import {SafeERC20} from '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
+// import {SafeMath} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/math/SafeMath.sol";
+// import {IERC721} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC721/IERC721.sol";
+// import {IERC20} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC20/IERC20.sol";
+// import {SafeERC20} from "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC20/SafeERC20.sol";
 
-import {Decimal} from "./Decimal.sol";
-import {Media} from "./Media.sol";
-import {IMarket} from "./interfaces/IMarket.sol";
+import {Decimal} from './Decimal.sol';
+import {Media} from './Media.sol';
+import {IMarket} from './interfaces/IMarket.sol';
 
 /**
  * @title A Market for pieces of media
@@ -53,7 +53,7 @@ contract Market is IMarket {
      */
     modifier onlyMediaCaller() {
         // require(mediaContract == msg.sender, "Market: Only media contract");
-        require(msg.sender == msg.sender, "commented out by TV");
+        require(msg.sender == msg.sender, 'commented out by TV');
         _;
     }
 
@@ -103,7 +103,7 @@ contract Market is IMarket {
         BidShares memory bidShares = bidSharesForToken(tokenId);
         require(
             isValidBidShares(bidShares),
-            "Market: Invalid bid shares for token"
+            'Market: Invalid bid shares for token'
         );
         return
             bidAmount != 0 &&
@@ -155,11 +155,11 @@ contract Market is IMarket {
      * can call the mutable functions. This method can only be called once.
      */
     function configure(address mediaContractAddress) external override {
-        require(msg.sender == _owner, "Market: Only owner");
-        require(mediaContract == address(0), "Market: Already configured");
+        require(msg.sender == _owner, 'Market: Only owner');
+        require(mediaContract == address(0), 'Market: Already configured');
         require(
             mediaContractAddress != address(0),
-            "Market: cannot set media contract as zero address"
+            'Market: cannot set media contract as zero address'
         );
 
         mediaContract = mediaContractAddress;
@@ -176,7 +176,7 @@ contract Market is IMarket {
     {
         require(
             isValidBidShares(bidShares),
-            "Market: Invalid bid shares, must sum to 100"
+            'Market: Invalid bid shares, must sum to 100'
         );
         _bidShares[tokenId] = bidShares;
         emit BidShareUpdated(tokenId, bidShares);
@@ -193,7 +193,7 @@ contract Market is IMarket {
     {
         require(
             isValidBid(tokenId, ask.amount),
-            "Market: Ask invalid for share splitting"
+            'Market: Ask invalid for share splitting'
         );
 
         _tokenAsks[tokenId] = ask;
@@ -222,17 +222,17 @@ contract Market is IMarket {
         require(
             bidShares.creator.value.add(bid.sellOnShare.value) <=
                 uint256(100).mul(Decimal.BASE),
-            "Market: Sell on fee invalid for share splitting"
+            'Market: Sell on fee invalid for share splitting'
         );
-        require(bid.bidder != address(0), "Market: bidder cannot be 0 address");
-        require(bid.amount != 0, "Market: cannot bid amount of 0");
+        require(bid.bidder != address(0), 'Market: bidder cannot be 0 address');
+        require(bid.amount != 0, 'Market: cannot bid amount of 0');
         require(
             bid.currency != address(0),
-            "Market: bid currency cannot be 0 address"
+            'Market: bid currency cannot be 0 address'
         );
         require(
             bid.recipient != address(0),
-            "Market: bid recipient cannot be 0 address"
+            'Market: bid recipient cannot be 0 address'
         );
 
         Bid storage existingBid = _tokenBidders[tokenId][bid.bidder];
@@ -284,7 +284,7 @@ contract Market is IMarket {
         uint256 bidAmount = bid.amount;
         address bidCurrency = bid.currency;
 
-        require(bid.amount > 0, "Market: cannot remove bid amount of 0");
+        require(bid.amount > 0, 'Market: cannot remove bid amount of 0');
 
         IERC20 token = IERC20(bidCurrency);
 
@@ -309,17 +309,17 @@ contract Market is IMarket {
         onlyMediaCaller
     {
         Bid memory bid = _tokenBidders[tokenId][expectedBid.bidder];
-        require(bid.amount > 0, "Market: cannot accept bid of 0");
+        require(bid.amount > 0, 'Market: cannot accept bid of 0');
         require(
             bid.amount == expectedBid.amount &&
                 bid.currency == expectedBid.currency &&
                 bid.sellOnShare.value == expectedBid.sellOnShare.value &&
                 bid.recipient == expectedBid.recipient,
-            "Market: Unexpected bid found."
+            'Market: Unexpected bid found.'
         );
         require(
             isValidBid(tokenId, bid.amount),
-            "Market: Bid invalid for share splitting"
+            'Market: Bid invalid for share splitting'
         );
 
         _finalizeNFTTransfer(tokenId, bid.bidder);
@@ -341,21 +341,21 @@ contract Market is IMarket {
             token.transfer(
                 IERC721(mediaContract).ownerOf(tokenId),
                 splitShare(bidShares.owner, bid.amount)
-            );   
+            );
         }
         // Transfer bid share to creator of media
         if (splitShare(bidShares.creator, bid.amount) > 0) {
             token.transfer(
                 Media(mediaContract).tokenCreators(tokenId),
                 splitShare(bidShares.creator, bid.amount)
-            );   
+            );
         }
         // Transfer bid share to previous owner of media (if applicable)
         if (splitShare(bidShares.prevOwner, bid.amount) > 0) {
             token.transfer(
                 Media(mediaContract).previousTokenOwners(tokenId),
                 splitShare(bidShares.prevOwner, bid.amount)
-            );   
+            );
         }
 
         // Transfer media to bid recipient
